@@ -2,16 +2,63 @@
 # Date: --
 # Description: Implementation of the "Classical teleportation" protocol
 
+from random import randrange
+
+def random_quantum_state():
+    first_entry = randrange(-100,101)
+    second_entry = randrange(-100,101)
+    third_entry = randrange(-100,101)
+    length_square = first_entry**2+second_entry**2
+    while length_square == 0:
+        first_entry = randrange(-100,101)
+        second_entry = randrange(-100,101)
+        third_entry = randrange(-100,101)
+        length_square = first_entry**2+second_entry**2+third_entry**2
+    first_entry = first_entry / length_square**0.5
+    second_entry = second_entry / length_square**0.5
+    third_entry = third_entry / length_square**0.5
+    return [first_entry, second_entry, third_entry]
+
+def initialize_vector(quantum_state):
+    length_square = 0
+    for i in range(len(quantum_state)):
+        length_square += quantum_state[i]**2
+    #print("summation of entry squares is",length_square)
+    # there might be precision problem
+    # the length may be very close to 1 but not exactly 1
+    # so we use the following trick
+    if (length_square - 1)**2 < 0.00000001:
+        return True
+    return False
+
 def Alice_state():
     v = []
+    while(initialize_vector(v) != True):
+        v = random_quantum_state()
+    #print(v)
     return v
 
 def Classical_c1(v,lambda1,lambda2):
     c1 = 0
+    sum1 = 0
+    sum2 = 0
+    for i in range(3):
+      sum1 += v[i]*lambda1[i]
+      sum2 += v[i]*lambda2[i]
+    if abs(sum2)>abs(sum1):
+      c1 = 1
     return c1
 
 def Classical_c2(v,lambda1,lambda2,c):
-    c2 = 0
+    c2 = 1
+    sum = 0
+    for i in range(3):
+      if c == 0:
+        sum += v[i]*lambda1[i]
+      else:
+        sum += v[i]*lambda2[i]
+    if sum < 0:
+      c2 = 0
     return c2
 
 def Bob_lambda(c1,c2,lambda0,lambda1):
