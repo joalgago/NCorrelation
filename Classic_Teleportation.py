@@ -1,6 +1,6 @@
-# Authors: José García, Yuvraj Thapa, 
+# Authors: José García, Yuvraj Thapa, Yasemin Poyraz Koçak
 # Date: --
-# Description: Implementation of the "Classical teleportation" protocol
+# Description: Implementation of the "Classical teleportation" protocol for a two qubit system
 
 from random import randrange
 
@@ -31,7 +31,7 @@ def initialize_vector(quantum_state):
         return True
     return False
 
-def Alice_state():
+def Random_vector():
     v = []
     while(initialize_vector(v) != True):
         v = random_quantum_state()
@@ -96,4 +96,12 @@ def Bob_output(y,lam):
     
 def Bob_probabilities(b,y,v):
     p = 0
+    if b > 0:
+        for i in range(0,3):
+            p += y[i]*v[i]
+        p = (1 + p)/2
+    elif b < 0:
+        for i in range(0,3):
+            p += y[i]*v[i]
+        p = (1 - p)/2
     return p
