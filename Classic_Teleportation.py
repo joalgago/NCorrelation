@@ -105,3 +105,12 @@ def Bob_probabilities(b,y,v):
             p += y[i]*v[i]
         p = (1 - p)/2
     return p
+
+def Protocol(v,y):
+  vec0 = Random_vector()
+  vec1 = Random_vector()
+  c1 = Classical_c1(v,vec0,vec1)
+  c2 = Classical_c2(v,vec0,vec1,c1)
+  lam = Bob_lambda(c1,c2,vec0,vec1)
+  b = Bob_output(y,lam)
+  return b
